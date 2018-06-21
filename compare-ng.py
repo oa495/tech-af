@@ -18,12 +18,10 @@ dictionary = corpora.Dictionary.load('dict/startups.dict')
 # load corpus
 corpus = corpora.MmCorpus('corpus/startups.mm') # comes from the first tutorial, "From strings to vectors"
 
-print corpus[102]
-
 lsi = models.LsiModel(corpus, id2word=dictionary, num_topics=300)
 
-# index = similarities.MatrixSimilarity(lsi[corpus], num_best=5, num_features=len(dictionary), corpus_len=len(corpus)) # transform corpus to LSI space and index it
-# index.save('corpus/startups.index')
+index = similarities.MatrixSimilarity(lsi[corpus], num_best=5, num_features=len(dictionary), corpus_len=len(corpus)) # transform corpus to LSI space and index it
+index.save('corpus/startups.index')
 index = similarities.MatrixSimilarity.load('corpus/startups.mm.index')
 
 ng_list = ng['product_desc'].tolist()
