@@ -7,9 +7,9 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 pd.set_option("display.width", 120)
 
 # open csv files
-ng = pd.read_csv("african-countries/Nigeria.csv")
-us_1 = pd.read_csv("us/us1.csv")
-us_2 = pd.read_csv("us/us2.csv")
+ng = pd.read_csv("countries/Nigeria.csv")
+us_1 = pd.read_csv("countries/us1.csv")
+us_2 = pd.read_csv("countries/us2.csv")
 frames = [us_1, us_2]
 us = pd.concat(frames)
 
@@ -17,11 +17,14 @@ us = pd.concat(frames)
 dictionary = corpora.Dictionary.load('dict/startups.dict')
 # load corpus
 corpus = corpora.MmCorpus('corpus/startups.mm') # comes from the first tutorial, "From strings to vectors"
+
+print corpus[102]
+
 lsi = models.LsiModel(corpus, id2word=dictionary, num_topics=300)
 
 # index = similarities.MatrixSimilarity(lsi[corpus], num_best=5, num_features=len(dictionary), corpus_len=len(corpus)) # transform corpus to LSI space and index it
 # index.save('corpus/startups.index')
-index = similarities.MatrixSimilarity.load('corpus/startups.index')
+index = similarities.MatrixSimilarity.load('corpus/startups.mm.index')
 
 ng_list = ng['product_desc'].tolist()
 
