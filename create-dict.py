@@ -8,7 +8,6 @@ from pprint import pprint  # pretty-printer
 
 pd.set_option("display.width", 120)
 # open csv file
-ng = pd.read_csv("countries/Nigeria.csv")
 us_1 = pd.read_csv("countries/us1.csv")
 us_2 = pd.read_csv("countries/us2.csv")
 frames = [us_1, us_2]

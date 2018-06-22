@@ -8,10 +8,8 @@ pd.set_option("display.width", 120)
 
 # open csv files
 ng = pd.read_csv("countries/Nigeria.csv")
-us_1 = pd.read_csv("countries/us1.csv")
-us_2 = pd.read_csv("countries/us2.csv")
-frames = [us_1, us_2]
-us = pd.concat(frames)
+ng_data = ng[['name','product_desc']]
+ng_data = ng_data.dropna()
 
 # load Dictionary
 dictionary = corpora.Dictionary.load('dict/startups.dict')
@@ -24,11 +22,23 @@ index = similarities.MatrixSimilarity(lsi[corpus], num_best=5, num_features=len(
 index.save('corpus/startups.index')
 index = similarities.MatrixSimilarity.load('corpus/startups.mm.index')
 
-ng_list = ng['product_desc'].tolist()
+with open('data.json', 'r') as f:
+	results = json.load(f)
 
-for doc in ng_list:
-	vec_bow = dictionary.doc2bow(doc.lower().split())
-	vec_lsi = lsi[vec_bow] # convert the query to LSI space
+# edges = [];
+for row in ng_data.iterrows():
+	print row
+	for sim in list(sims):
+		edge = {}
+		edge.source = row['name']
+		doc = row['product_desc']
+		vec_bow = dictionary.doc2bow(doc.lower().split())
+		vec_lsi = lsi[vec_bow] # convert the query to LSI space
+		sims = index[vec_lsi] # perform a similarity query against the corpus
+		edge['target'] = results[sim[0]] 
+		edge['weight'] = sim[1]
+		edges.push(edge)
 
-	sims = index[vec_lsi] # perform a similarity query against the corpus
-	print(list(enumerate(sims))) # print (document_number, document_similarity) 2-tuples
+with open('edges.json', 'w') as outfile:
+    json.dump(edges, outfile, ensure_ascii=False)
+
