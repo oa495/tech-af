@@ -2,12 +2,13 @@ import pandas as pd
 from gensim import corpora, models, similarities
 import json
 import logging
+import codecs
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 pd.set_option("display.width", 120)
 
 # open csv files
-ng = pd.read_csv("countries/Nigeria.csv")
+ng = pd.read_csv("african-countries/Angola.csv") # put the csv of whatever country
 ng_data = ng[['name','product_desc']]
 ng_data = ng_data.dropna()
 
@@ -18,27 +19,28 @@ corpus = corpora.MmCorpus('corpus/startups.mm') # comes from the first tutorial,
 
 lsi = models.LsiModel(corpus, id2word=dictionary, num_topics=300)
 
+# num_best says get top 5 that are similar, you can change it. 
 index = similarities.MatrixSimilarity(lsi[corpus], num_best=5, num_features=len(dictionary), corpus_len=len(corpus)) # transform corpus to LSI space and index it
-index.save('corpus/startups.index')
-index = similarities.MatrixSimilarity.load('corpus/startups.mm.index')
+# index.save('corpus/startups.index')
+# index = similarities.MatrixSimilarity.load('corpus/startups.mm.index')
 
-with open('data.json', 'r') as f:
-	results = json.load(f)
+f = codecs.open('data.json', encoding="ISO-8859-1")
+results = json.load(f)
 
-# edges = [];
-for row in ng_data.iterrows():
-	print row
+edges = []
+for row in ng_data.itertuples():
+	doc = (row[2]).decode('utf-8', 'ignore')
+	vec_bow = dictionary.doc2bow(doc.lower().split())
+	vec_lsi = lsi[vec_bow] # convert the query to LSI space
+	sims = index[vec_lsi] # perform a similarity query against the corpus
 	for sim in list(sims):
 		edge = {}
-		edge.source = row['name']
-		doc = row['product_desc']
-		vec_bow = dictionary.doc2bow(doc.lower().split())
-		vec_lsi = lsi[vec_bow] # convert the query to LSI space
-		sims = index[vec_lsi] # perform a similarity query against the corpus
+		edge['source'] = row[1]
 		edge['target'] = results[sim[0]] 
 		edge['weight'] = sim[1]
-		edges.push(edge)
+		edges.append(edge)
 
-with open('edges.json', 'w') as outfile:
+print edges
+with open('sim-data/ng-.json', 'w') as outfile:
     json.dump(edges, outfile, ensure_ascii=False)
 
