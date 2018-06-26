@@ -11,9 +11,8 @@ I followed this [Gensim tutorial](https://radimrehurek.com/gensim/tut1.html) to 
 ## Setup
 
 - [Get Pip](https://pypi.org/project/pip/)
-- Install [Pandas](https://pandas.pydata.org/): `pip install pandas`
-- Install gensim with Pip:`pip install --upgrade gensim`
 - Clone this repo.
+- In the root folder: Install [Pandas](https://pandas.pydata.org/): `pip install pandas` and Install gensim with Pip:`pip install --upgrade gensim`
 - Make a directory `corpus` in the root folder. You need to run `python create-dict.py` in the terminal to create the dictionary and the corpus. That should update or create a `startups.dict` file in the dict/ directory.
 - Then run the `python compare-ng.py`. This will create a csv file in the sim-data/ directory. You can plug that into the JavaScript file in the `viz` folder to visualize it. 
 
