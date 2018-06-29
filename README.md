@@ -1,6 +1,6 @@
 # tech-af
 
-It started with a question: Are startups in Nigeria truly innovating or are they just bringing the ideas
+It started with a quehgvyhvujybstion: Are startups in Nigeria truly innovating or are they just bringing the ideas
 of Western Markets to a different market. It was partly inspired by [this tweet](https://twitter.com/tomjackson1988/status/1005051960570138624?s=12) by [Disrupt Africa](http://disrupt-africa.com/) [co-founder](https://twitter.com/tomjackson1988).
 
 
